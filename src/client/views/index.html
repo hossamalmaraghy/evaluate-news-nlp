@@ -35,24 +35,8 @@
             <p>This is a footer</p>
         </footer>
 
-        <script>
-            document.getElementById('analyze-button').addEventListener('click', async function() {
-                const text = document.getElementById('text-input').value;
-    
-                const response = await fetch('/analyze', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ text: text }),
-                });
-    
-                const data = await response.json();
-                
-                // Display the sentiment result on the page
-                document.getElementById('result').innerHTML = `Sentiment: ${data.score_tag}, Confidence: ${data.confidence}%`;
-            });
-        </script>
+        <script src="../js/formHandler.js"></script>
+
 
     </body>
 </html>

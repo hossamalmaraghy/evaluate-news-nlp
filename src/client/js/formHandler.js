@@ -1,30 +1,35 @@
-// Replace checkForName with a function that checks the URL
-import { checkForName } from './nameChecker'
+// src/client/js/formHandler.js
 
-// If working on Udacity workspace, update this with the Server API URL e.g. `https://wfkdhyvtzx.prod.udacity-student-workspaces.com/api`
-// const serverURL = 'https://wfkdhyvtzx.prod.udacity-student-workspaces.com/api'
-const serverURL = 'https://localhost:8000/api'
-
-const form = document.getElementById('urlForm');
-form.addEventListener('submit', handleSubmit);
-
-function handleSubmit(event) {
+const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Get the URL from the input field
-    const formText = document.getElementById('name').value;
-
-    // This is an example code that checks the submitted name. You may remove it from your code
-    checkForName(formText);
     
-    // Check if the URL is valid
- 
-        // If the URL is valid, send it to the server using the serverURL constant above
+    const formText = document.getElementById('name').value;
+  
+    try {
+      const response = await fetch('http://localhost:8000/api', {
+        method: 'POST',
+        body: JSON.stringify({ text: formText }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+  
+      const data = await response.json();
       
-}
-
-// Function to send data to the server
-
-// Export the handleSubmit function
-export { handleSubmit };
-
+      // Dynamically update content on the page
+      document.getElementById('results').innerHTML = `
+        <p>Polarity: ${data.polarity}</p>
+        <p>Confidence: ${data.confidence}</p>
+        <p>Subjectivity: ${data.subjectivity}</p>
+      `;
+    } catch (error) {
+      console.error('Error:', error);
+      document.getElementById('results').innerHTML = 'Error fetching data. Please try again.';
+    }
+  };
+  
+  export { handleSubmit };

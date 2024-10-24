@@ -1,18 +1,14 @@
+// src/client/js/nameChecker.js
+
 function checkForName(inputText) {
     console.log("::: Running checkForName :::", inputText);
-    let names = [
-        "Picard",
-        "Janeway",
-        "Kirk",
-        "Archer",
-        "Georgiou"
-    ];
+    const regex = /^[a-zA-Z\s]+$/;
 
-    if(names.includes(inputText)) {
-        alert("Welcome, Captain!");
-    }
-    else {
+    if (inputText.match(regex)) {
+        return true;
+    } else {
         alert("Enter a valid captain name");
+        return false;
     }
 }
 

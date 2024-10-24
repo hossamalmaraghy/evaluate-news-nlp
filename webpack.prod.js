@@ -1,9 +1,10 @@
-const path = require('path')
-const webpack = require('webpack')
-const HtmlWebPackPlugin = require("html-webpack-plugin")
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebPackPlugin = require("html-webpack-plugin");
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // You also need to make sure this is imported
 
 module.exports = {
     entry: './src/client/index.js',
@@ -21,21 +22,28 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: [
-                  'style-loader', // injects CSS to the DOM
-                  'css-loader', // translates CSS into CommonJS
-                  'sass-loader', // compiles Sass to CSS
-                ],
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
               },
         ]
     },
+    optimization: {
+        minimizer: [
+          `...`, // Extends existing minimizers (like `terser-webpack-plugin`)
+          new CssMinimizerPlugin(),
+        ],
+      },
     plugins: [
         new HtmlWebPackPlugin({
             template: "./src/client/views/index.html",
             filename: "./index.html",
         }),
-        new WorkboxPlugin.GenerateSW(),
-        new CleanWebpackPlugin(),  // Clean dist folder before every build        
+
+        new CleanWebpackPlugin(),  // Clean dist folder before every build  
+        new MiniCssExtractPlugin({ filename: '[name].css' }),
+        new WorkboxPlugin.GenerateSW({
+            clientsClaim: true,
+            skipWaiting: true,
+          }),
     ],
     devServer: {
         port: 3000,
