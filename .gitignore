@@ -1,0 +1,6 @@
+# Ignore the .env file to protect API keys and other sensitive information
+.env
+
+# Node.js-related ignores (optional)
+node_modules
+dist
