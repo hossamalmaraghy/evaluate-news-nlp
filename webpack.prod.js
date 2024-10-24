@@ -2,9 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const WorkboxPlugin = require('workbox-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // You also need to make sure this is imported
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // You also need to make sure this is imported
 
 module.exports = {
     entry: './src/client/index.js',
@@ -39,14 +39,13 @@ module.exports = {
         }),
 
         new CleanWebpackPlugin(),  // Clean dist folder before every build  
+
         new MiniCssExtractPlugin({ filename: '[name].css' }),
+
         new WorkboxPlugin.GenerateSW({
             clientsClaim: true,
             skipWaiting: true,
+            swDest: 'service-worker.js', // Output path for the service worker file
           }),
     ],
-    devServer: {
-        port: 3000,
-        allowedHosts: 'all'
-    }
 }
