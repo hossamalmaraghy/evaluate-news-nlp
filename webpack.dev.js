@@ -6,43 +6,40 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
     entry: './src/client/index.js',
     mode: 'development',
-    devtool: 'source-map',  // Keep source maps for easier debugging
-    stats: 'verbose',  // More detailed output of build stats
+    devtool: 'source-map',  // For easier debugging in development
+    stats: 'verbose',       // Gives detailed output
     module: {
         rules: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: "babel-loader"
+                loader: "babel-loader",
             },
             {
                 test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']  // Chain of loaders for SASS/SCSS
-            }
-        ]
+                use: ['style-loader', 'css-loader', 'sass-loader'],  // Enables live style injection
+            },
+        ],
     },
     plugins: [
         new HtmlWebPackPlugin({
             template: "./src/client/views/index.html",
-            filename: "./index.html",
+            filename: "index.html",
         }),
         new CleanWebpackPlugin({
-            // Simulate the removal of files (can be disabled later in real builds)
-            dry: true,
-            // Write Logs to Console
+            dry: true, // Simulates the clean without actually removing files; useful in development
             verbose: true,
-            // Automatically remove all unused webpack assets on rebuild
             cleanStaleWebpackAssets: true,
-            protectWebpackAssets: false
+            protectWebpackAssets: false,
         }),
-        new webpack.HotModuleReplacementPlugin()  // Enable Hot Module Replacement for better dev experience
+        new webpack.HotModuleReplacementPlugin(),
     ],
     devServer: {
         port: 3000,
-        allowedHosts: 'all',  // Allow access from any network
-        hot: true  // Enable Hot Module Replacement
+        allowedHosts: 'all',
+        hot: true,  // Enables Hot Module Replacement for faster development
     },
     cache: {
-        type: 'memory',  // Enable caching for faster builds during development
-    }
+        type: 'memory',  // Faster builds with in-memory caching
+    },
 };

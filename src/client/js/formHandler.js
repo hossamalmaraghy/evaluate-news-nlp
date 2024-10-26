@@ -32,4 +32,4 @@ const handleSubmit = async (event) => {
     }
   };
   
-  export { handleSubmit };
+  document.getElementById('urlForm').addEventListener('submit', handleSubmit);

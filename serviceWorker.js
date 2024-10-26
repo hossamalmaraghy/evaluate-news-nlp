@@ -24,15 +24,13 @@ self.addEventListener('install', event => {
 });
 
 // Fetch event: Serve files from the cache first
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response; // If there's a match in the cache, it return the cached resource
-        }
-        return fetch(event.request); // Otherwise, fetch from the network
-      })
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request).catch(() => {
+        return new Response('Offline fallback: Resource not available');
+      });
+    })
   );
 });
 

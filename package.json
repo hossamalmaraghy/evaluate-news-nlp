@@ -43,5 +43,9 @@
   },
   "jest": {
     "testEnvironment": "jsdom"
+  },
+  "engines": {
+  "node": ">=22.7.0"
   }
+  
 }
