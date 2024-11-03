@@ -1,35 +1,35 @@
-// src/client/js/formHandler.js
+// Import the nameChecker function
+import { checkForName } from './nameChecker';
 
-const handleSubmit = async (event) => {
+export const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    const formText = document.getElementById('name').value;
-  
-    try {
-      const response = await fetch('http://localhost:8000/api', {
-        method: 'POST',
-        body: JSON.stringify({ text: formText }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-  
-      const data = await response.json();
-      
-      // Dynamically update content on the page
-      document.getElementById('results').innerHTML = `
-        <p>Polarity: ${data.polarity}</p>
-        <p>Confidence: ${data.confidence}</p>
-        <p>Subjectivity: ${data.subjectivity}</p>
-      `;
-    } catch (error) {
-      console.error('Error:', error);
-      document.getElementById('results').innerHTML = 'Error fetching data. Please try again.';
+
+    const name = document.getElementById('name').value;
+
+    // Validate the name input
+    if (!checkForName(name)) {
+        return; // Stop submission if validation fails
     }
-  };
-  
-  document.getElementById('urlForm').addEventListener('submit', handleSubmit);
+
+    try {
+        const response = await fetch(`https://api.example.com/analyze?text=${name}`);
+        const data = await response.json();
+
+        document.getElementById('results').innerHTML = `
+            Polarity: ${data.polarity} <br>
+            Confidence: ${data.confidence} <br>
+            Subjectivity: ${data.subjectivity}
+        `;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        document.getElementById('results').innerHTML = "An error occurred. Please try again.";
+    }
+};
+
+// Only add the event listener if the element exists
+if (typeof document !== 'undefined') {
+    const form = document.getElementById('urlForm');
+    if (form) {
+        form.addEventListener('submit', handleSubmit);
+    }
+}

@@ -28,8 +28,7 @@ module.exports = {
     },
     optimization: {
         minimizer: [
-          `...`, // Keeps other default minimizers (like Terser)
-          new CssMinimizerPlugin(),
+            new CssMinimizerPlugin(),
         ],
     },
     plugins: [
@@ -37,7 +36,9 @@ module.exports = {
             template: "./src/client/views/index.html",
             filename: "index.html",
         }),
-        new CleanWebpackPlugin(),
+        new CleanWebpackPlugin({
+                dry: false, // Optional: set to false when moving closer to final testing stages.
+            }),
         new MiniCssExtractPlugin({ filename: '[name].css' }),
         new WorkboxPlugin.GenerateSW({
             clientsClaim: true,
